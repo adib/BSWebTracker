@@ -98,7 +98,7 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
     if (!trackerURLString) {
         return;
     }
-    if (!campaignName.length == 0) {
+    if (campaignName.length == 0) {
         // campaign name is required. So we just plug in the current date here.
         //Sample date: "Tue May 17 06:18:25 +0000 2011" (used by Twitter)
         NSDateFormatter* fmt = [NSDateFormatter new];
