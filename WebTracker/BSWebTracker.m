@@ -26,7 +26,6 @@
 
 @property (nonatomic,strong,readonly) NSMutableArray* trackerURLQueue;
 
-@property (nonatomic) BOOL webViewBusy;
 @end
 
 // ---
@@ -40,7 +39,7 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 {
     NSMutableArray* queue = self.trackerURLQueue;
     if (queue.count > 0) {
-        if (self.webViewBusy) {
+        if ([_webView isLoading]) {
             // retry later
             [[NSNotificationQueue defaultQueue] enqueueNotification:notification postingStyle:NSPostWhenIdle];
             return;
@@ -48,6 +47,9 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
         NSURL* url = queue[0];
         NSURLRequest* request = [NSURLRequest requestWithURL:url];
         [self.webView.mainFrame loadRequest:request];
+    } else if (![_webView isLoading]) {
+        // no more queued requests & web view isn't doing anything - clean up the web view
+        [self cleanupWebView];
     }
 }
 
@@ -74,9 +76,18 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
     if (queue.count > 0) {
         [queue removeObjectAtIndex:0];
     }
-    if (queue.count > 0) {
-        // still has more requests
-        [self notifyFlushQueue];
+
+    // either handle more requests or cleanup the web view.
+    [self notifyFlushQueue];
+    
+}
+
+-(void) cleanupWebView
+{
+    if (_webView) {
+        [_webView stopLoading:nil];
+        _webView.frameLoadDelegate = nil;
+        _webView = nil;
     }
 }
 
@@ -119,10 +130,7 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 
 -(void)dealloc
 {
-    if (_webView) {
-        _webView.frameLoadDelegate = nil;
-        _webView = nil;
-    }
+    [self cleanupWebView];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -206,14 +214,13 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 
 - (void)webView:(WebView *)webView didStartProvisionalLoadForFrame:(WebFrame *)webFrame
 {
-    self.webViewBusy = YES;
+    
 }
 
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)webFrame
 {
     if (webFrame == webView.mainFrame) {
         [self dequeueURL];
-        self.webViewBusy = NO;
     }
 }
 
@@ -221,7 +228,6 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 {
     if (webFrame == webView.mainFrame) {
         [self dequeueURL];
-        self.webViewBusy = NO;
     }
 }
 
