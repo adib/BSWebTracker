@@ -39,19 +39,22 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 {
     NSMutableArray* queue = self.trackerURLQueue;
     if (queue.count > 0) {
-        if ([_webView isLoading]) {
+        // allocate WebView when needed, because we need one.
+        WebView* webView = self.webView;
+        if ([webView isLoading]) {
             // retry later
             [[NSNotificationQueue defaultQueue] enqueueNotification:notification postingStyle:NSPostWhenIdle];
             return;
         }
         NSURL* url = queue[0];
         NSURLRequest* request = [NSURLRequest requestWithURL:url];
-        [self.webView.mainFrame loadRequest:request];
+        [webView.mainFrame loadRequest:request];
     } else if (![_webView isLoading]) {
         // no more queued requests & web view isn't doing anything - clean up the web view
         [self cleanupWebView];
     }
 }
+
 
 -(void) notifyFlushQueue
 {
@@ -85,8 +88,8 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 -(void) cleanupWebView
 {
     if (_webView) {
-        [_webView stopLoading:nil];
         _webView.frameLoadDelegate = nil;
+        [_webView stopLoading:nil];
         _webView = nil;
     }
 }
