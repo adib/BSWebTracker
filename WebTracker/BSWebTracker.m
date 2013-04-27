@@ -186,7 +186,8 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 {
     if (!_trackingSource) {
         NSBundle* mainBundle = [NSBundle mainBundle];
-        _trackingSource = [mainBundle.infoDictionary[(__bridge id) kCFBundleIdentifierKey] copy];
+        NSDictionary* infoDictionary = mainBundle.infoDictionary;
+        _trackingSource = [NSString stringWithFormat:@"%@ (%@)",infoDictionary[(__bridge id) kCFBundleIdentifierKey],infoDictionary[(__bridge id)kCFBundleVersionKey]];
     }
     return _trackingSource;
 }
