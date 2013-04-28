@@ -42,13 +42,13 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
         // allocate WebView when needed, because we need one.
         WebView* webView = self.webView;
         if ([webView isLoading]) {
-            // retry later
-            [[NSNotificationQueue defaultQueue] enqueueNotification:notification postingStyle:NSPostWhenIdle];
-            return;
+            return; // webView is busy.
         }
-        NSURL* url = queue[0];
-        NSURLRequest* request = [NSURLRequest requestWithURL:url];
-        [webView.mainFrame loadRequest:request];
+        NSURL* url = [self dequeueURL];
+        if (url) {
+            NSURLRequest* request = [NSURLRequest requestWithURL:url];
+            [webView.mainFrame loadRequest:request];
+        }
     } else if (![_webView isLoading]) {
         // no more queued requests & web view isn't doing anything - clean up the web view
         [self cleanupWebView];
@@ -72,17 +72,15 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 }
 
 
--(void) dequeueURL
+-(NSURL*) dequeueURL
 {
-    // TODO: handle reachability, sleep/wake, etc – make it more resilient
+    NSURL* url = nil;
     NSMutableArray* queue = self.trackerURLQueue;
     if (queue.count > 0) {
+        url = queue[0];
         [queue removeObjectAtIndex:0];
     }
-
-    // either handle more requests or cleanup the web view.
-    [self notifyFlushQueue];
-    
+    return url;
 }
 
 -(void) cleanupWebView
@@ -221,17 +219,23 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
     
 }
 
+
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)webFrame
 {
     if (webFrame == webView.mainFrame) {
-        [self dequeueURL];
+        // either handle more requests or cleanup the web view.
+        [self notifyFlushQueue];
     }
 }
+
 
 - (void)webView:(WebView *)webView didFailLoadWithError:(NSError *)error forFrame:(WebFrame *)webFrame
 {
     if (webFrame == webView.mainFrame) {
-        [self dequeueURL];
+        // either handle more requests or cleanup the web view.
+        // wait for a while to give a chance for network adaptor, etc to get connectivity
+        [self performSelector:@selector(notifyFlushQueue) withObject:nil afterDelay:10];
+        // TODO: handle reachability, sleep/wake, etc – make it more resilient
     }
 }
 
