@@ -83,6 +83,7 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
     return url;
 }
 
+
 -(void) cleanupWebView
 {
     if (_webView) {
@@ -115,6 +116,19 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
     [self queueURL:url];
 }
 
+
+-(void) retryAfterFailure
+{
+    // TODO: handle reachability, sleep/wake, etc – make it more resilient
+    BSWebTracker __weak* weakSelf = self;
+    [[NSOperationQueue mainQueue] performSelector:@selector(addOperationWithBlock:) withObject:^{
+        // wait for a while to give a chance for network adaptor, etc to get connectivity
+        // this won't do anything if the object is already deallocated.
+        [weakSelf notifyFlushQueue];
+    } afterDelay:10];
+}
+
+
 #pragma mark NSObject
 
 -(id)init
@@ -125,6 +139,7 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
     }
     return self;
 }
+
 
 -(void)dealloc
 {
@@ -223,13 +238,17 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 }
 
 
+- (void)webView:(WebView *)webView didFailProvisionalLoadWithError:(NSError *)error forFrame:(WebFrame *) webFrame
+{
+    if (webFrame == webView.mainFrame) {
+        [self retryAfterFailure];
+    }
+}
+
 - (void)webView:(WebView *)webView didFailLoadWithError:(NSError *)error forFrame:(WebFrame *)webFrame
 {
     if (webFrame == webView.mainFrame) {
-        // either handle more requests or cleanup the web view.
-        // wait for a while to give a chance for network adaptor, etc to get connectivity
-        [self performSelector:@selector(notifyFlushQueue) withObject:nil afterDelay:10];
-        // TODO: handle reachability, sleep/wake, etc – make it more resilient
+        [self retryAfterFailure];
     }
 }
 
