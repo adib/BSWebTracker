@@ -100,11 +100,8 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
         return;
     }
     if (campaignName.length == 0) {
-        // campaign name is required. So we just plug in the current date here.
-        //Sample date: "Tue May 17 06:18:25 +0000 2011" (used by Twitter)
-        NSDateFormatter* fmt = [NSDateFormatter new];
-        fmt.dateFormat = @"EEE MMM dd HH:mm:ss ZZZ yyyy";
-        campaignName = [fmt stringFromDate:[NSDate date]];
+        // campaign name is required. So we just plug in a default here.
+        campaignName = @"(none)";
     }
     NSMutableString* urlString = [NSMutableString stringWithFormat:@"%@?utm_source=%@&utm_medium=%@&utm_campaign=%@",trackerURLString,[self.trackingSource stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],[self.trackingMedium stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],[campaignName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     if (campaignContent.length > 0) {
@@ -145,11 +142,8 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 {
     if (!_trackingMedium) {
         // http://stackoverflow.com/questions/5868567/unique-identifier-of-a-mac
-        io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
-                                                                     
-                                                                     IOServiceMatching("IOPlatformExpertDevice"));
+        io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,IOServiceMatching("IOPlatformExpertDevice"));
         CFStringRef serialNumberAsCFString = NULL;
-        
         if (platformExpert) {
             serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert,
                                                                      CFSTR(kIOPlatformSerialNumberKey),
