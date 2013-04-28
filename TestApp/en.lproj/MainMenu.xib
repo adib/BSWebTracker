@@ -1354,13 +1354,13 @@
 							<string key="NSFrame">{{110, 156}, {350, 22}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="703638696"/>
+							<reference key="NSNextKeyView" ref="119367865"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="204202417">
 								<int key="NSCellFlags">-1804599231</int>
 								<int key="NSCellFlags2">272630784</int>
-								<string key="NSContents">http://t.scuttlebuttapp.com/test/</string>
+								<string key="NSContents">http://example.com</string>
 								<reference key="NSSupport" ref="660914494"/>
 								<string key="NSCellIdentifier">_NS:9</string>
 								<reference key="NSControlView" ref="785638947"/>
@@ -1431,6 +1431,7 @@
 							<string key="NSFrame">{{17, 127}, {88, 17}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView" ref="339171811"/>
 							<string key="NSReuseIdentifierKey">_NS:1535</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="776053826">
@@ -1473,6 +1474,7 @@
 							<string key="NSFrame">{{110, 124}, {350, 22}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView" ref="703638696"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="17209356">
@@ -4174,6 +4176,17 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">BSAppDelegate</string>
 					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">track:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">track:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">track:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="campaignContentTextField">NSTextField</string>
 						<string key="campaignNameTextField">NSTextField</string>

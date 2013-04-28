@@ -36,10 +36,11 @@
 }
 
 #pragma mark Action Handlers
+
 - (IBAction)track:(id)sender
 {
     BSWebTracker* tracker = self.webTracker;
     tracker.trackerURLString = self.trackingURLTextField.stringValue;
-    [tracker trackName:self.campaignContentTextField.stringValue content:self.campaignContentTextField.stringValue term:self.campaignContentTextField.stringValue];
+    [tracker trackName:self.campaignContentTextField.stringValue content:self.campaignContentTextField.stringValue term:self.campaignTermTextField.stringValue];
 }
 @end
