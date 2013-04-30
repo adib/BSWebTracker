@@ -55,4 +55,8 @@ Currently the class doesn't handle offline conditions or website outages. Thus r
 
 ## License
 
-This project is licensed under the BSD license. Please let me ([Sasmito Adibowo](mailto:adib@cutecoder.org)) know if you use it for something interesting.
+This project is licensed under the BSD license. Please let me know if you use it for something interesting.
+
+--  
+[Sasmito Adibowo](mailto:adib@cutecoder.org)  
+http://cutecoder.org  
