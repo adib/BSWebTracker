@@ -217,7 +217,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = BS;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Basil Salad Software";
 			};
 			buildConfigurationList = C0BED0F5172C0E8200C3FF0B /* Build configuration list for PBXProject "WebTracker" */;
@@ -392,6 +392,7 @@
 		C0BED127172C0F3C00C3FF0B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WebTracker/WebTracker-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -402,6 +403,7 @@
 		C0BED128172C0F3C00C3FF0B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WebTracker/WebTracker-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
