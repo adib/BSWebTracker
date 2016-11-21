@@ -15,7 +15,7 @@
 		C0BED114172C0E8200C3FF0B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0BED112172C0E8200C3FF0B /* MainMenu.xib */; };
 		C0BED11F172C0F3B00C3FF0B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0BED0FD172C0E8200C3FF0B /* Cocoa.framework */; };
 		C0BED129172C0F4A00C3FF0B /* libWebTracker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0BED11E172C0F3B00C3FF0B /* libWebTracker.a */; };
-		C0BED12E172C0FC800C3FF0B /* BSWebTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C0BED12C172C0FC700C3FF0B /* BSWebTracker.h */; };
+		C0BED12E172C0FC800C3FF0B /* BSWebTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C0BED12C172C0FC700C3FF0B /* BSWebTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C0BED12F172C0FC800C3FF0B /* BSWebTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = C0BED12D172C0FC800C3FF0B /* BSWebTracker.m */; };
 		C0BED131172C178900C3FF0B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0BED130172C178900C3FF0B /* IOKit.framework */; };
 		C0BED13A172C18F000C3FF0B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0BED139172C18F000C3FF0B /* WebKit.framework */; };
@@ -396,6 +396,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WebTracker/WebTracker-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -407,6 +408,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WebTracker/WebTracker-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
