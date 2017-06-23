@@ -28,7 +28,7 @@
 #import "BSWebTracker.h"
 
 
-@interface BSWebTracker ()
+@interface BSWebTracker ()<WebFrameLoadDelegate>
 
 @property (nonatomic,strong,readonly) NSString* trackingMedium;
 
