@@ -168,30 +168,14 @@ NSString* const BSWebTrackerFlushQueueNotification = @"com.basilsalad.BSWebTrack
 -(NSString *)trackingMedium
 {
     if (!_trackingMedium) {
-        // http://stackoverflow.com/questions/5868567/unique-identifier-of-a-mac
-        io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,IOServiceMatching("IOPlatformExpertDevice"));
-        CFStringRef serialNumberAsCFString = NULL;
-        if (platformExpert) {
-            serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert,
-                                                                     CFSTR(kIOPlatformSerialNumberKey),
-                                                                     kCFAllocatorDefault, 0);
-            IOObjectRelease(platformExpert);
+        NSString* webTrackerKey = @"BSWebTracker_UserIdentifier";
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* trackerValue = [defaults stringForKey:webTrackerKey];
+        if (!trackerValue || trackerValue.length == 0) {
+            trackerValue = [[NSUUID UUID] UUIDString];
+            [defaults setObject:trackerValue forKey:webTrackerKey];
         }
-        
-        NSString *serialNumberAsNSString = nil;
-        if (serialNumberAsCFString) {
-            serialNumberAsNSString = [NSString stringWithString:(__bridge NSString *)serialNumberAsCFString];
-            CFRelease(serialNumberAsCFString);
-        }
-        
-        if (!serialNumberAsNSString) {
-            NSHost* host = [NSHost currentHost];
-            serialNumberAsNSString = [[host name] copy];
-        }
-        if (serialNumberAsNSString.length == 0) {
-            serialNumberAsNSString = @"(unknown)";
-        }
-        _trackingMedium = serialNumberAsNSString;
+        _trackingMedium = trackerValue;
     }
     return _trackingMedium;
 }
